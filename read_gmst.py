@@ -6,6 +6,7 @@ file = '~/nas/home/BERK/global_mean_monthly/Land_and_Ocean_complete.txt'
 
 df = pd.read_csv(file, comment = '%', header = None, delim_whitespace = True)
 
+# use +/- two years for the 49-month moving average
 start_year_idx = np.where(df[0] == 1898)[0][0]
 end_year_idx = np.where(df[0] == 2017)[0][11]
 
