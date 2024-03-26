@@ -7,12 +7,24 @@ import scipy.stats as stats
 import statsmodels.api as sm
 from sklearn.linear_model import ElasticNetCV, ElasticNet, LinearRegression
 import matplotlib.patches as mpatches
+import math
 
-
-def plot_shading_map(ax, data, lons, lats, extent, cmap):
-    base = ax.contourf(lons, lats, data, levels = 21, transform=ccrs.PlateCarree(), cmap = cmap, extend='both')
+######################################################################################################################
+# scripts related to plotting
+######################################################################################################################
+def plot_shading_map(ax, data, lons, lats, extent, cmap, vmin = np.nan, vmax = np.nan, sst_mask = True):
+    if math.isnan(vmin):
+        base = ax.contourf(lons, lats, data, levels = 21, transform=ccrs.PlateCarree(), cmap = cmap, extend='both')
+    else:
+        v = np.linspace(vmin, vmax, 21, endpoint=True)
+        v = np.around(v, decimals=2)
+        base = ax.contourf(lons, lats, data, v, transform=ccrs.PlateCarree(), cmap = cmap, extend='both')
+   
     # ax.coastlines(resolution='10m', color='grey', linestyle='-', alpha=1)
-    ax.add_feature(cfeature.OCEAN, zorder=100, edgecolor='k', facecolor='whitesmoke')
+    if sst_mask:
+        ax.add_feature(cfeature.OCEAN, zorder=100, edgecolor='k', facecolor='whitesmoke')
+    else:
+        ax.coastlines(resolution='10m', color='grey', linestyle='-', alpha=1)
     ax.set_extent(extent, ccrs.PlateCarree())
     ax.plot([-10, 30, 30, -10, -10], [35, 35, 70, 70, 35],
          color='black', linewidth=1,
@@ -21,13 +33,17 @@ def plot_shading_map(ax, data, lons, lats, extent, cmap):
     
     return
 
-def plot_contour_map(ax, data, lats, lons, 
-             extent = [-30, 50, 25, 90]):
-    ax.coastlines
+def plot_contour_map(ax, data, lons, lats, extent):
+    data_min = int(np.floor(np.min(data) / 500.0)) * 500
+    data_max = int(np.ceil(np.max(data) / 500.0)) * 500
+    data_levels = np.arange(data_min, data_max + 500, 500)
+    ax.contour(lons, lats, data, levels = data_levels, colors='black', transform=ccrs.PlateCarree(),linewidths = 0.75, zorder = 101)
     ax.set_extent(extent, ccrs.PlateCarree())
-    ax.contour(lons, lats, data, transform=ccrs.PlateCarree())
     return
 
+######################################################################################################################
+# MISC
+######################################################################################################################
 def is_leap(yy):
     if yy % 4 == 0:
         if yy % 100 == 0:
@@ -62,7 +78,11 @@ def mv_avg_smooth(y, window = 5):
     y = np.convolve(y, np.ones(window)/window, mode='valid')
     return y, y0[half_wind:-half_wind] - y
 
-def slp_distance(X0, XX):
-
-    return
+######################################################################################################################
+# functions used in the analogue-based dynamical adjustment
+######################################################################################################################
+class analogue_dynamical_adjustment:
+    def __init__(self):
+        
+        return
 

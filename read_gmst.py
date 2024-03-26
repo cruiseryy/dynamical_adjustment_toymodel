@@ -17,7 +17,6 @@ pause = 1
 
 gmst = np.zeros((116, 12))
 for mm in range(12):
-    
     gmst[:, mm] = sm_monthly[mm::12]
 
 gmst
