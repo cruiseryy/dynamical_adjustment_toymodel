@@ -24,7 +24,8 @@ with xr.open_dataset('data/temp.nc') as ds, xr.open_dataset('data/slp.nc') as ds
         cur += dd[mm]   
 
 # 4-year (49-month) smoothed GMST based on BERK monthly GMST data (sea-ice temperature inferred from air temp)
-# refer to van, otto and other WWA work to justify the window size of 4 years (to remove ENSO related variability)
+# refer to van, otto and other WWA work to justify the window size of 4 years 
+# (as a proxy of forced variability while not mixing it with major internal dynamic variability like ENSO), some examples include:
 # 1. https://nhess.copernicus.org/articles/21/941/2021/nhess-21-941-2021.pdf
 # 2. https://journals.ametsoc.org/view/journals/clim/32/16/jcli-d-18-0555.1.xml
 
